@@ -1,0 +1,82 @@
+THOMAS FLORKIEWICZ
+CS 6533 - Project 3
+
+=============================================================================
+This is a template description file.  Please fill in by replacing the []'s
+with relevant content (write a *single* sentence description for each method,
+bug, extension, etc...).  Then, remove any leftover []'s.
+=============================================================================
+
+Incomplete parts:
+-----------------
+  - none
+
+Bugs in code:
+-------------
+  - animation doesnt work for speed parameter of < 0.4
+  - bug occasionally bumps into obstacle, very rarely though and only into the obstacles that take up more perimeter 
+  
+Extensions/extra credit completed:
+----------------------------------
+  - Bug cam
+  - Added several baby bugs to the scene. They are attracted to main bug (simple flocking), and slightly repelled from other baby bugs so they don't collide
+  - Added a predator bug. drawn differently (as a black widow). Predator is attracted to small baby bugs (and they are repelled by it), but can't take on the big main bug so there is no forces between mainbug and predator bug.
+
+================================================================
+
+Methods completed or changed
+----------------------------
+
+Bug.java
+  - keyframe()
+  Finds the two adjacent keyframes based on the t/T values. 
+  
+  - findT()
+  Finds T0 by stepping through the keyT array and comparing against t value passed in. This way it doesn't matter how many keyframes we will have.
+  
+  -linear_interpolation()
+  Given our x0, x1, y0, y1 values, it linearly approximates the value at specified x value
+  
+  - transform()
+  Rotates bug around z-axis (which is pointed up in this coordinate system) by using bug's velocity vector's y and x values to find the angle to rotate by. I initially tried to do this by using cosine but saw yr hint about atan2 - cheers for that!
+
+Critter.java
+  - integrate()
+  Integrates critter's vel and pos for a given dt value - this assumes the bug's accelerations have been added up already.
+  
+  - accelDrag()
+  Appends to the bug's acceleration vector a specified dampening force. a = -kv
+  
+  - accelAttract()
+  Appends to the bug's acceleration vector an attraction/repulsion to a specified point, with a specified constant value and exponent. I normalize the direction vector because , well it's supposed to be a direction so needs length of 1.
+
+Rock.java
+ - compute()
+ Calls the recursive function to compute the height map. I had to add some parameters that the recursive function needs here , and adjusted some constants and that's it.
+ 
+ - computeFractal()
+ Recursively computes the height map of a rock/terrain structure using random displacement and hardcoded a recursive decrease in var of 1/2. 
+
+Scene.java
+ - build()
+ Added code to create a number of trees/rocks/critters using appropriate constructors. Also added code to initialize a randomized goalpoint - where mainbug will be attracted to and this point will be later periodically randomly changed in scene.process()
+  - process()
+ For each call to process, we might go through a varied number of 'physics' steps, stored in numsteps. in each physics step, we sum up the accelerations for all the bugs. Main bug is attracted to the origin, and a randomized goal point. He/she is also repelled from various obstacles. Baby bugs are attracted to the main bug so they flock, and also repelled from obstacles.
+  - drawText()
+ Added code to display the goalpoint coordinates and mainbug's dist travelled (For debugging) 
+
+TreePart.java
+  - TreePart()
+  Recursively construct the data structure. Each level of recursion will create an array of branches, positioned at random intervals along z axis of the current 'stump'. Each child branch in the array will have a randomized length, width, position, and angle (pitch/yaw/roll). Stop condition: depth=0 (leaf). We hold leaves to different angle/size randomization limits so the tree looks more realistic.
+  
+  - draw()
+  Recursively draws the recursive data structure, travelling 'up' the tree, since each branch stores transformation details about it relative to its parent we use push/pop.
+  
+ Predator.java
+  - keyframe()  - findT()   -linear_interpolation()- transform()
+  same as Bug
+    
+  - draw()
+  drawing the predator to resemble a black widow spider
+  
+ 

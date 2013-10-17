@@ -1,0 +1,55 @@
+THOMAS FLORKIEWICZ
+CS 6533 - Project 2
+
+=============================================================================
+This is a template description file.  Please fill in by replacing the []'s
+with relevant content (write a *single* sentence description for each method,
+bug, extension, etc...).  Then, remove any leftover []'s.
+=============================================================================
+
+Incomplete parts:
+-----------------
+  - NONE
+
+Bugs in code:
+-------------
+  - NONE (known)
+
+Extensions/extra credit completed:
+----------------------------------
+  - Implemented the torus shape as a tesselated primitive
+  - Drawing wireframe using glPolygonOffset to prevent z-fighting
+
+================================================================
+
+Methods completed or changed (Java and GLSL)
+--------------------------------------------
+
+Ellipsoid.java
+- evalPosition(): compute ellipsoid position from u,v
+- evalNormal():   compute ellipsoid normal vector from u,v
+
+ellipsoid.vp (GLSL)
+- ellipsoidPosition(): compute ellipsoid position from u,v
+- ellipsoidNormal():   compute ellipsoid normal vector from u,v
+- main(): pass through vertex0,1 and normal0,1 as u,v values into above functions
+
+illum.fp (GLSL)
+- toonShade() - implemented the algorithm outlined in project 2 handout for toon shading. chose constants: c=0.2/0.45/0.8 (depending on diffuse and toonlow/high relative values). Chose a bright color vec4(0.7, 0.8, 0.9, 0.0) for all high specular values
+- main() - implemented the algorithm to compute the 3 components of color as per handout. after calculation, clamp each color channel to 0..1. 
+
+torus.vp (GLSL)
+- torusPosition(): compute torus position from u,v
+- torusNormal():   compute torus normal vector from u,v
+- main(): pass through vertex0,1 and normal0,1 as u,v values into above functions
+
+PolyMesh.java
+- computeAllNormals(): implemented the algorithm discussed in class - computing average normal of each vertex by looking at the average normals of its adjacent polygons. 
+
+Shape.java
+- draw(): added calls to drawwireframe / drawpolygon / drawsilhouette functions, depending on selected options
+- drawPolygons(): enabling the glsl frag shader for duration of function. This function will draw polygons using either 1) flat shading or 2) smooth shading (not both). (1) will compute a single normal per each polygon (and each vertex in that polygon), while (2) will use the normal computed in polymesh.computeallnormals() for each vertex  
+- drawWireframe(): Similar code to drawpolygons where we go through all polygons contained in shape, except in this case we are using the glpolygonmode 'gl_line' to draw each polygon as wireframe. no frag shader needed here.
+- drawSilhouette(): I went with the 'sneaky' suggestion outlined in the project 2 handout - draw the polygons in a solid color (matching background color), and then draw the rear-facing polygons as thick wireframe, hence the wireframes 'stick out' and form the silhouette.
+
+- Added lots of helper drawxxx functions to improve code readability/reusability

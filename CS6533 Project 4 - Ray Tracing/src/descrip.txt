@@ -1,0 +1,52 @@
+THOMAS FLORKIEWICZ
+CS 6533 - Project 4
+
+Incomplete parts:
+-----------------
+  - NONE
+  
+Bugs in code:
+-------------
+  - code hangs when scene is constructed in such a way that objects overlap. ran out of time to fix this but judging by the project description we don't have to code for this case.
+  
+Extensions/extra credit completed:
+----------------------------------
+  - anti-aliasing
+  - bump mapping (see custom3.ppm, uses rock.ppm for the checkerboard material bumpmapping)
+  
+================================================================
+
+Methods completed or changed
+----------------------------
+
+Camera.java
+- pixelRay():
+creates a ray (origin, direction) based on precomputed UVN values. origin placement has to account for the placement of near plane of view frustrum. direction of ray = u * x + v * y - n * near
+
+Scene.java
+- castRay():
+main recursive function of the ray tracer. computes local lighting by adding up lighting computations from all the lights in the scene, then calls itself recurively to compute reflection and reflection ray lighting contribution for the pixel.
+
+- intersects():
+function finds the first valid intersection of the given ray with an object in the scene. 'valid' means we ignore errors due to floating point calculations (controlled by epsilon) , and also we ignore the tangent scenario, where the ray just skims the edge of an object.
+
+- shadowRay():
+constructs and sends out a 'shadow feeler' ray toward the given light from the given intersection, based on light type (directional vs point). 
+
+- shadowTint():
+for a given shadow feeler ray, computes the product of all object.kt values that it intersects 
+
+- render():
+added anti-aliasing, sending out 4 rays per pixel (randomly scattered around the pixel once again using the 'epsilon' factor).
+
+Light.java
+- compute():
+Computes the local lighting, given the intersection, the ray, and the tint (to control shadowing). ambient+diffuse+specular. Also takes into account light attenuation using the function for attenuation for point lights (for directional there is no attenuation).
+bonus- added bumpmap lookup for the intersection normal
+
+- calculateattenuation():
+calculates the attenuation based on distance from light and constants configured for the light
+
+
+Material.java
+- added a lot of **bumpmap** methods (modeled after the way textures were implemented) to support bumpmap parameter in scene file, and bumpmap image lookups
